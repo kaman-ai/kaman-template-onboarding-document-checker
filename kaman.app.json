@@ -1,80 +1,28 @@
 {
   "name": "Onboarding Document Checker",
   "agents": {
-    "verifier": "356855f8-4542-5a9f-a26e-37ba9dfadf43",
-    "policy_checker": "5507e9ae-fce5-5022-afaa-5a948b70361c",
-    "case_handler": "34a624a1-9035-5d23-b5d2-af32d35b28c9"
+    "verifier": "4ac61cf7-8b94-524a-add2-cfb04e795fc8",
+    "policy_checker": "bd59280a-f626-5cd4-b6b6-4c2d84e0a59d",
+    "case_handler": "66e00d97-28e4-5c51-87aa-3ef0d91ae4c5"
   },
   "workflows": {
-    "flow": "ac1e3b81-4a58-5276-8b44-05b1ba5761e6"
+    "flow": "3a4b3900-a927-529f-ab59-389865777701"
+  },
+  "scenarios": {
+    "desk": "720d2692-cc22-59ef-8bea-b51a943f70e4"
   },
   "ui": {
     "title": "Onboarding Document Checker",
     "tagline": "Checks a new customer's onboarding file end to end: extracts the details from the documents, verifies identity and screens sanctions alongside a policy check, and routes the file - approve, ask the customer for what is missing, or send it to an officer.",
-    "actions": [
-      {
-        "id": "run",
-        "label": "Run: Onboarding document check",
-        "description": "A new customer application arrives. Kaman extracts the applicant's details from the documents, verifies identity and screens sanctions in parallel with a policy check, then routes: clean files are approved, mismatches go to an onboarding officer, missing documents are requested from the customer.",
-        "kind": "workflow",
-        "target": "flow",
-        "wrap": "payload",
-        "inputs": [
-          {
-            "name": "application_id",
-            "label": "Application id",
-            "kind": "text",
-            "default": "APP-55102"
-          },
-          {
-            "name": "product",
-            "label": "Product",
-            "kind": "text",
-            "default": "business-current-account"
-          },
-          {
-            "name": "applicant",
-            "label": "Applicant",
-            "kind": "json",
-            "default": {
-              "name": "Meridian Tools Pvt Ltd",
-              "registration_no": "U29299MH2019PTC321456",
-              "country": "IN"
-            }
-          },
-          {
-            "name": "documents",
-            "label": "Documents",
-            "kind": "json",
-            "default": [
-              {
-                "kind": "certificate_of_incorporation",
-                "text": "Certificate of Incorporation ... Meridian Tools Private Limited ... CIN U29299MH2019PTC321456 ... dated 14 March 2019"
-              },
-              {
-                "kind": "director_id",
-                "text": "Passport ... Surname: RAO Given names: ANIKA ... Date of expiry: 02 JUN 2031"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "ask",
-        "label": "Ask the Identity & Screening Verifier",
-        "description": "Checks the company against Salesforce and the applicant's documents against what is on file in Drive.",
-        "kind": "agent",
-        "target": "verifier",
-        "prompt": "{{question}}",
-        "inputs": [
-          {
-            "name": "question",
-            "label": "Your question",
-            "kind": "text",
-            "default": "Verify application APP-77 end to end."
-          }
-        ]
-      }
-    ]
+    "run": "Run: Onboarding document check",
+    "chat": {
+      "agent": "verifier",
+      "title": "Ask the Identity & Screening Verifier",
+      "suggestions": [
+        "Applicant company 'Meridian Tools Pvt Ltd', registration U29299MH2019PTC321456. Director Anika Rao, passport, expiry 2031-06-02. query_soql on Account returned [{Id: '001x', Name: 'Meridian Tools Pvt Ltd', AccountNumber: 'U29299MH2019PTC321456'}]. drive_get_content for Anika Rao's passport returned text matching her passport number and the 2031-06-02 expiry. Reply as instructed.",
+        "query_soql on Account returned [{Id: '001y', Name: 'Northwind Trading LLP', AccountNumber: '12345'}] for registration 12345, but the application says 'Northwind Traders Ltd'.",
+        "Verify application APP-77 end to end."
+      ]
+    }
   }
 }
